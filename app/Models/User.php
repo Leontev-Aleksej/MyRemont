@@ -7,10 +7,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    const ADMIN_ROLE='admin';
+
+    public function isAdmin(){
+        return $this->role===self::ADMIN_ROLE;
+    }
+
+    public function orders(): HasMany{
+        return $this->hasMany(Order::class);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +30,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'middlename',
+        'lastname',
+        'login',
         'email',
         'password',
+        'tel',
     ];
 
     /**
